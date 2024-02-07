@@ -42,7 +42,7 @@ services:
 
 # Semantic Network
   semantic_network_web:
-    build: ./semantic_network
+    image: ghcr.io/reasonableai/semantic-network:latest
     ports:
       - "5000:5000"
     environment:
