@@ -166,3 +166,4 @@ orchestrator/benchmarking/*.json
 
 # Rabbit data
 rabbitdata/
+settings.yaml

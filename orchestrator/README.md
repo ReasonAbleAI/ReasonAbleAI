@@ -6,6 +6,14 @@ The orchestrator will continuously improve its semantic networks by acquiring ne
 
 Unlike queries directly against LLMs, the orchestrator will be inquisitive and proactive. It will be far more humble and willing to ask clarifying questions and admit ignorance. Using abilities, it may also proactively ask humans questions via Slack, for instance, asking whether a specific source it has found contains accurate information and then updating its semantic network with this new information. The orchestrator actions will be auditable as the LLM prompts it produces and responses will be logged. Hallucinations will be far less likely as the LLM prompts the orchestrator produces will be structured with appropriate context.
 
+
+## Working with the repository
+
+1. Ensure you have [pipenv](https://pipenv.pypa.io/en/latest/) installed
+2. Run `pipenv install` to install the dependencies
+3. Run `pipenv shell` to shell into your environment
+
+
 ## Containerized Deployment
 
 Create [`settings.yaml`](https://github.com/Shopify/reasonableai/blob/main/orchestrator/settings.yaml.example) with [semantic networks](https://github.com/Shopify/reasonableai/tree/main/semantic_network), abilities (incoming...), desires of your choosing, and [Ollama API url](https://ollama.ai/).
