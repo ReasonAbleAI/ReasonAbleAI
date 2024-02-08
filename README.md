@@ -16,8 +16,8 @@ This is the intial design but expect this to evolve during prototyping. We will 
 
 ```mermaid
 graph TB
-    A([Human]) <-- "Send and receive threaded messages" --> F>Communicator]
-    F <-- "Interface to communicate with humans" --> B(((Orchestrator)))
+    A([Human]) <-- "Threaded messaging protocol" --> F>Communicator]
+    F <-- "Interface to communicate with external agents" --> B(((Orchestrator)))
     B <-- "Interface with data store" --> D[(Semantic network)]
     B <-- "Interface with an ability" --> C{Ability}
     B <-- "Interface with LLM" --> G[/Ollama/]
