@@ -1,3 +1,12 @@
+# Example settings.yaml file for ReasonAbleAI
+
+# Orchestrator settings
+
+communicators:
+  - name: email
+    url: https://emailer.domain.tld
+    agents:
+      - greg
 semantic_networks:
   - name: Tigers
     url: https://tigers.domain.tld
@@ -11,4 +20,23 @@ desires:
     priority: 10
     description: Use the Researcher ability to learn about Tigers and store that information in the Tigers semantic network
 # Note, this can also be set as an environment variable OLLAMA_URL
-ollama_url: https://ollama-api.domain.tld
+# ollama_url: https://ollama-api.domain.tld
+
+
+# Communicator settings
+
+agents:
+  - name: greg
+    email: greg@domain.tld
+
+imap:
+  host: imap.gmail.com
+  port: 993
+  username: raai@gmail.com
+  password: my_long_password
+
+smtp:
+  host: smtp.gmail.com
+  port: 587
+  username: raai@gmail.com
+  password: my_long_password

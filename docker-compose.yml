@@ -1,46 +1,67 @@
 version: '3'
 services:
 
-# Orchestrator
-  orchestrator-web:
-    build: ./orchestrator
-    container_name: orchestrator-web
-    hostname: orchestrator-web-host
+  #################################
+  # Orchestrator related services #
+  #################################
+
+  orchestrator-api:
+    image: ghcr.io/reasonableai/orchestrator:latest
+    container_name: orchestrator-api
     volumes:
       - ./settings.yaml:/app/settings.yaml
     ports:
-      - "5001:5000"
+      - "5000:5000"
     environment:
-      - RABBITMQ_HOST=amqp://guest:guest@my-rabbit:5672/
-      - OLLAMA_URL=${OLLAMA_URL}
+      - REDIS_URL=redis://orchestrator-redis:6379/0
+      - OLLAMA_URL=http://orchestrator-ollama:11434
     depends_on:
-      - my-rabbit
+      - orchestrator-redis
 
   orchestrator-worker:
-    build: ./orchestrator
+    image: ghcr.io/reasonableai/orchestrator:latest
     command: celery -A celery_app worker
     container_name: orchestrator-worker
-    hostname: orchestrator-worker-host
     volumes:
       - ./settings.yaml:/app/settings.yaml
     environment:
-      - RABBITMQ_HOST=amqp://guest:guest@my-rabbit:5672/
-      - ORCHESTRATOR_WEB_URL=http://orchestrator-web:5000
-      - OLLAMA_URL=${OLLAMA_URL}
+      - REDIS_URL=redis://orchestrator-redis:6379/0
+      - OLLAMA_URL=http://orchestrator-ollama:11434
     depends_on:
-      - my-rabbit
+      - orchestrator-redis
 
-  my-rabbit:
-    image: rabbitmq:3-management-alpine
-    container_name: my-rabbit
-    hostname: my-rabbit-host
-    ports:
-      - "15672:15672"
-      - "5672:5672"
+  orchestrator-flower:
+    image: ghcr.io/reasonableai/orchestrator:latest
+    command: celery -A celery_app flower
+    container_name: orchestrator-flower
     volumes:
-      - rabbit_data:/var/lib/rabbitmq
+      - ./settings.yaml:/app/settings.yaml
+    ports:
+      - "5555:5555"
+    environment:
+      - REDIS_URL=redis://orchestrator-redis:6379/0
+    depends_on:
+      - orchestrator-redis
 
-# Semantic Network
+  orchestrator-redis:
+    image: redis:latest
+    container_name: orchestrator-redis
+    ports:
+      - "6379:6379"
+
+  orchestrator-ollama:
+    image: ollama/ollama:latest
+    container_name: orchestrator-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+
+
+  ########################################
+  # Semantic Networks & related services #
+  ########################################
+
   semantic_network_web:
     image: ghcr.io/reasonableai/semantic-network:latest
     ports:
@@ -63,6 +84,18 @@ services:
       - "7687:7687"
     volumes:
       - neo4j_data:/data
+
+
+  #################
+  # Communicators #
+  #################
+
+  emailer:
+    image: ghcr.io/reasonableai/emailer:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./settings.yaml:/app/settings.yaml
 
 volumes:
   neo4j_data:
