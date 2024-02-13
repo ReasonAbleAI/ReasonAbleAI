@@ -49,54 +49,55 @@ services:
     ports:
       - "6379:6379"
 
+  # See the https://ollama.ai docs for instructions on pulling models
   orchestrator-ollama:
     image: ollama/ollama:latest
     container_name: orchestrator-ollama
     ports:
       - "11434:11434"
     volumes:
-      - ollama:/root/.ollama
+      - orchestrator_ollama:/root/.ollama
 
 
-  ########################################
-  # Semantic Networks & related services #
-  ########################################
+  #####################
+  # Semantic Networks #
+  #####################
 
-  semantic_network_web:
+  python_semantic_network_web:
     image: ghcr.io/reasonableai/semantic-network:latest
     ports:
-      - "5000:5000"
+      - "6000:5000"
     environment:
-      - NEO4J_URI=neo4j://semantic_network_db:7687
+      - NEO4J_URI=neo4j://python_semantic_network_db:7687
       - NEO4J_USERNAME=neo4j
       - NEO4J_PASSWORD=superlongsecret
       - |
         API_DOCUMENTATION=API documentation
         This API is useful for answering questions about Python coding.
     depends_on:
-      - semantic_network_db
+      - python_semantic_network_db
 
-  semantic_network_db:
+  python_semantic_network_db:
     image: neo4j:latest
     environment:
       - NEO4J_AUTH=neo4j/superlongsecret
     ports:
       - "7687:7687"
     volumes:
-      - neo4j_data:/data
+      - python_semantic_network_data:/data
 
 
   #################
   # Communicators #
   #################
 
-  emailer:
+  emailer_communicator:
     image: ghcr.io/reasonableai/emailer:latest
     ports:
-      - "5000:5000"
+      - "7000:5000"
     volumes:
       - ./settings.yaml:/app/settings.yaml
 
 volumes:
-  neo4j_data:
-  rabbit_data:
+  python_semantic_network_data:
+  orchestrator_ollama:

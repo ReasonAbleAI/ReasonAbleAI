@@ -1,24 +1,25 @@
 # Example settings.yaml file for ReasonAbleAI
+# You can use a shared `settings.yaml` for the Orchestrator and Communicator (unless you are using multiple communicators)
 
 # Orchestrator settings
 
 communicators:
   - name: email
-    url: https://emailer.domain.tld
+    url: http://emailer_communicator:5000
     agents:
       - greg
 semantic_networks:
-  - name: Tigers
-    url: https://tigers.domain.tld
-    description: Has details about tigers, their habbits, range, etc
+  - name: Python Programming Language
+    url: http://python_semantic_network_web:5000
+    description: Has details about the Python programming language, packages, libraries, patterns, best practices, etc.
 abilities:
-  - name: Researcher
-    url: https://reseracher.domain.tld
-    description: Can query the internet to reserach any topic
+  - name: GitHub # This ability does not yet exist
+    url: http://github_ability:5000
+    description: Can read code in repositories, create and respond to GitHub issues, and read and create GitHub pull requests.
 desires:
-  - name: Tigers
+  - name: Improve orchestrator code base
     priority: 10
-    description: Use the Researcher ability to learn about Tigers and store that information in the Tigers semantic network
+    description: Read code from the ReasonAbleAI/orchestrator repo and find ways to improve it. Then create a pull request with the changes unless another similar pull request already exist.
 # Note, this can also be set as an environment variable OLLAMA_URL
 # ollama_url: https://ollama-api.domain.tld
 
